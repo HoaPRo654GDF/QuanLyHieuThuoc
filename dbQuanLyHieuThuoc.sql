@@ -12,8 +12,14 @@ CREATE TABLE Thuoc (
     HanSuDung DATE,
     GiaBan DECIMAL(18,2) NOT NULL,
     SoLuongTon INT NOT NULL,
-    MaNhaCungCap VARCHAR(10),
     CONSTRAINT CK_SoLuongTon CHECK (SoLuongTon >= 0)
+);
+CREATE TABLE Thuoc_NhaCungCap (
+    MaThuoc VARCHAR(10) NOT NULL,
+    MaNhaCungCap VARCHAR(10) NOT NULL,
+    PRIMARY KEY (MaThuoc, MaNhaCungCap),
+    FOREIGN KEY (MaThuoc) REFERENCES Thuoc(MaThuoc),
+    FOREIGN KEY (MaNhaCungCap) REFERENCES NhaCungCap(MaNhaCungCap)
 );
 
 -- B?ng KhachHang
@@ -300,11 +306,11 @@ END;
 GO
         
 -- Thêm d? li?u vào b?ng Thuoc
-INSERT INTO Thuoc (MaThuoc, TenThuoc, MoTa, HanSuDung, GiaBan, SoLuongTon, MaNhaCungCap)
+INSERT INTO Thuoc (MaThuoc, TenThuoc, MoTa, HanSuDung, GiaBan, SoLuongTon)
 VALUES
-    ('T001', N'Paracetamol', N'Gi?m ?au, h? s?t', '2025-12-31', 15000, 100, 'NCC01'),
-    ('T002', N'Amoxicillin', N'Kháng sinh ph? r?ng', '2026-06-15', 50000, 50, 'NCC02'),
-    ('T003', N'Aspirin', N'Gi?m ?au, ch?ng viêm', '2025-09-20', 20000, 75, 'NCC01');
+    ('T001', N'Paracetamol', N'Gi?m ?au, h? s?t', '2025-12-31', 15000, 100),
+    ('T002', N'Amoxicillin', N'Kháng sinh ph? r?ng', '2026-06-15', 50000, 50),
+    ('T003', N'Aspirin', N'Gi?m ?au, ch?ng viêm', '2025-09-20', 20000, 75);
 
 -- Thêm d? li?u vào b?ng KhachHang
 INSERT INTO KhachHang (MaKhachHang, HoTen, SoDienThoai, Email, DiaChi, NgaySinh)
@@ -346,7 +352,22 @@ VALUES
     ('PN001', 'T001', 10, 50000),
     ('PN001', 'T002', 5, 70000),
     ('PN002', 'T003', 15, 40000);
+DELETE FROM ChiTietNhapHang;
 
+INSERT INTO Thuoc_NhaCungCap (MaThuoc, MaNhaCungCap)
+VALUES 
+('T001', 'NCC001'),
+('T002', 'NCC002'),
+('T001', 'NCC002');
+
+DELETE FROM Thuoc;
+DELETE FROM NhaCungCap;
+DELETE FROM NhapHang;
+DELETE FROM Thuoc_NhaCungCap;
+Select*from Thuoc;
+Select*From NhaCungCap;
+Select*From ChiTietHoaDon;
+DELETE FROM ChiTietHoaDon;
 INSERT INTO Quyen (MaQuyen, TenQuyen)
 VALUES 
     ('Q001', N'Quản lý'),
