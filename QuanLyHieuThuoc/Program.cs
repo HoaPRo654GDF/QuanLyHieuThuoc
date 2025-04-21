@@ -4,6 +4,7 @@ using QuanLyHieuThuoc.DataAccess;
 using QuanLyHieuThuoc.EventDriven;
 using QuanLyHieuThuoc.EventDriven.Channels;
 using QuanLyHieuThuoc.EventDriven.Processors;
+using QuanLyHieuThuoc.Forms;
 //using QuanLyHieuThuoc.EventDriven.Interfaces;
 
 namespace QuanLyHieuThuoc
@@ -27,7 +28,7 @@ namespace QuanLyHieuThuoc
             InitializeComponents();
 
             // Kh?i ch?y form chính
-            Application.Run(new QuanLyHoaDonBanHang());
+            Application.Run(new QuanLyThuocForm());
 
             // D?ng x? lý s? ki?n khi thoát ?ng d?ng
             EventQueue.StopProcessing();
@@ -69,6 +70,15 @@ namespace QuanLyHieuThuoc
 
             EventMediator.RegisterChannel("SearchInvoice", searchInvoiceChannel);
             EventMediator.RegisterProcessor("SearchInvoice", searchInvoiceProcessor);
+
+
+            // Đăng ký các channel và processor
+            var medicineChannel = new MedicineChannel();
+            var medicineProcessor = new MedicineProcessor(Database);
+
+            EventMediator.RegisterChannel("AddMedicine", medicineChannel);
+            EventMediator.RegisterProcessor("AddMedicine", medicineProcessor);
+
 
             // B?t ??u x? lý s? ki?n
             EventQueue.StartProcessing(EventMediator);
